@@ -1,0 +1,53 @@
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	input := getInput(RawInput)
+	fmt.Printf("%+v\n", input)
+
+	bus, t := findBus(input)
+	wait := t - input.t
+	fmt.Printf("%d at %d (Wait=%d)\n", bus, t, wait)
+	fmt.Println(wait * bus)
+}
+
+func findBus(inp input) (int, int) {
+	for t := inp.t; ; t++ {
+		for _, i := range inp.ids {
+			if t%i == 0 {
+				return i, t
+			}
+		}
+	}
+	return 0, 0
+}
+
+func getInput(i string) input {
+	lines := strings.Split(i, "\n")
+
+	et, _ := strconv.Atoi(lines[0])
+	ids := []int{}
+	for _, v := range strings.Split(lines[1], ",") {
+		if v != "x" {
+			id, _ := strconv.Atoi(v)
+			ids = append(ids, id)
+		}
+	}
+	return input{et, ids}
+}
+
+type input struct {
+	t   int
+	ids []int
+}
+
+const DemoInput = `939
+7,13,x,x,59,x,31,19`
+
+const RawInput = `1000104
+41,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,37,x,x,x,x,x,659,x,x,x,x,x,x,x,23,x,x,x,x,13,x,x,x,x,x,19,x,x,x,x,x,x,x,x,x,29,x,937,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,17`
